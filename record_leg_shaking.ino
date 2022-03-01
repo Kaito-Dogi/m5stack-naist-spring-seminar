@@ -29,7 +29,7 @@ void setup() {
   M5.begin();
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setTextSize(2);
-  M5.Lcd.setTextColor(WHITE);
+  M5.Lcd.setTextColor(WHITE, BLACK);
   M5.Lcd.println("CSV Writer");
 
   // set up WiFi
@@ -44,8 +44,6 @@ void setup() {
 }
 
 void loop() {
-  M5.Lcd.fillScreen(BLACK);
-
   fetch_time();
   display_time();
 
@@ -66,7 +64,7 @@ void fetch_time() {
 }
 
 void display_time() {
-  M5.Lcd.setTextColor(WHITE);
+  M5.Lcd.setTextColor(WHITE, BLACK);
   M5.Lcd.setCursor(0, 50, 1);
   M5.Lcd.println(date_str + "  ");
   M5.Lcd.println(time_str + "  ");
