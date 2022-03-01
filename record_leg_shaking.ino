@@ -60,6 +60,8 @@ void setup() {
   M5.Lcd.println("\nWiFi connected.");
 
   sync_time();
+
+  delay(5000);
 }
 
 void loop() {
