@@ -22,6 +22,12 @@ float accZ = 0.0F;
 float gyroX = 0.0F;
 float gyroY = 0.0F;
 float gyroZ = 0.0F;
+String accX_str;
+String accY_str;
+String accZ_str;
+String gyroX_str;
+String gyroY_str;
+String gyroZ_str;
 
 // file
 File file;
@@ -30,6 +36,7 @@ const char* file_name = "/hoge_log.csv";
 // functions
 void sync_time();
 void fetch_time();
+void data_to_string();
 void display_data();
 void write_data();
 
@@ -56,12 +63,15 @@ void setup() {
 }
 
 void loop() {
+  // get data
   fetch_time();
-
   M5.IMU.getAccelData(&accX, &accY, &accZ);
   M5.IMU.getGyroData(&gyroX, &gyroY, &gyroZ);
 
+  data_to_string();
+
   display_data();
+
   write_data();
 }
 
@@ -78,25 +88,32 @@ void fetch_time() {
   time_str = (String)time_info.tm_hour + ":" + (String)time_info.tm_min + ":" + (String)time_info.tm_sec;
 }
 
+void data_to_string() {
+  accX_str = (String)accX;
+  accY_str = (String)accY;
+  accZ_str = (String)accZ;
+  gyroX_str = (String)gyroX;
+  gyroY_str = (String)gyroY;
+  gyroZ_str = (String)gyroZ;
+}
+
 void display_data() {
   M5.Lcd.setTextColor(GREEN, BLACK);
+  M5.Lcd.setCursor(0, 50, 1);
 
   // time
-  M5.Lcd.setCursor(0, 50, 1);
-  M5.Lcd.println(date_str + "  ");
-  M5.Lcd.println(time_str + "  ");
+  M5.Lcd.println("date:  " + date_str + "  ");
+  M5.Lcd.println("time:  " + time_str + "  ");
 
   // acceleration
-  M5.Lcd.setCursor(0, 100, 1);
-  M5.Lcd.println(accX + "  ");
-  M5.Lcd.println(accY + "  ");
-  M5.Lcd.println(accZ + "  ");
+  M5.Lcd.println("accX:  " + accX_str + "  ");
+  M5.Lcd.println("accY:  " + accY_str + "  ");
+  M5.Lcd.println("accZ:  " + accZ_str + "  ");
 
   // gyro
-  M5.Lcd.setCursor(0, 150, 1);
-  M5.Lcd.println(gyroX + "  ");
-  M5.Lcd.println(gyroY + "  ");
-  M5.Lcd.println(gyroZ + "  ");
+  M5.Lcd.println("gyroX: " + gyroX_str + "  ");
+  M5.Lcd.println("gyroY: " + gyroY_str + "  ");
+  M5.Lcd.println("gyroZ: " + gyroZ_str + "  ");
 }
 
 
@@ -104,12 +121,12 @@ void display_data() {
 void write_data() {
   file = SD.open(file_name, FILE_APPEND);
   file.println(date_str + "," + time_str
-    + "," + accX
-    + "," + accX
-    + "," + accX
-    + "," + gyroX
-    + "," + gyroY
-    + "," + gyroZ
+    + "," + accX_str
+    + "," + accY_str
+    + "," + accZ_str
+    + "," + gyroX_str
+    + "," + gyroY_str
+    + "," + gyroZ_str
     );
   file.close();
 }
