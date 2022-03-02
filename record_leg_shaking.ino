@@ -31,7 +31,7 @@ String gyroZ_str;
 
 // file
 File file;
-const char* file_name = "/hoge_log.csv";
+const char* file_name = "/hoge.csv";
 
 // functions
 void sync_time();
@@ -40,8 +40,11 @@ void data_to_string();
 void display_data();
 void write_data();
 
+// count
+int count = 0;
+
 void setup() {
-  // set up M5Stack.
+  // set up M5Stack
   M5.begin();
   M5.Power.begin();
   M5.Lcd.fillScreen(BLACK);
@@ -61,7 +64,9 @@ void setup() {
 
   sync_time();
 
-  delay(5000);
+  file = SD.open(file_name, FILE_APPEND);
+
+  M5.Lcd.println("Recoding...");
 }
 
 void loop() {
@@ -75,6 +80,12 @@ void loop() {
   display_data();
 
   write_data();
+
+  count++;
+  if (count > 200) {
+    file.close();
+    M5.Lcd.println("Saved.");
+  }
 }
 
 void sync_time() {
@@ -101,7 +112,7 @@ void data_to_string() {
 
 void display_data() {
   M5.Lcd.setTextColor(GREEN, BLACK);
-  M5.Lcd.setCursor(0, 50, 1);
+  M5.Lcd.setCursor(0, 70, 1);
 
   // time
   M5.Lcd.println("date:  " + date_str + "  ");
@@ -118,17 +129,8 @@ void display_data() {
   M5.Lcd.println("gyroZ: " + gyroZ_str + "  ");
 }
 
-
-
 void write_data() {
-  file = SD.open(file_name, FILE_APPEND);
-  file.println(date_str + "," + time_str
-    + "," + accX_str
-    + "," + accY_str
-    + "," + accZ_str
-    + "," + gyroX_str
-    + "," + gyroY_str
-    + "," + gyroZ_str
-    );
-  file.close();
+  // file = SD.open(file_name, FILE_APPEND);
+  file.println(date_str + "," + time_str + "," + accX_str + "," + accY_str + "," + accZ_str + "," + gyroX_str + "," + gyroY_str + "," + gyroZ_str);
+  // file.close();
 }
